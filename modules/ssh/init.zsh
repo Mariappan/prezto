@@ -13,28 +13,41 @@ fi
 # Set the path to the SSH directory.
 _ssh_dir="$HOME/.ssh"
 
+_ssh_host=`hostname`
+
 # Set the path to the environment file if not set by another module.
-_ssh_agent_env="${_ssh_agent_env:-${XDG_CACHE_HOME:-$HOME/.cache}/prezto/ssh-agent.env}"
+_ssh_agent_env="${_ssh_agent_env:-${XDG_CACHE_HOME:-$HOME}/.ssh/ssh-agent-${_ssh_host}.env.$UID}"
 
 # Set the path to the persistent authentication socket.
-_ssh_agent_sock="${XDG_CACHE_HOME:-$HOME/.cache}/prezto/ssh-agent.sock"
+# _ssh_agent_sock="${XDG_CACHE_HOME:-$HOME/.cache}/prezto/ssh-agent.sock"
+_ssh_agent_sock="${XDG_CACHE_HOME:-$HOME}/.ssh/ssh-agent-${_ssh_host}.sock.$UID"
+
+# Export environment variables.
+source "$_ssh_agent_env" 2> /dev/null
 
 # Start ssh-agent if not started.
-if [[ ! -S "$SSH_AUTH_SOCK" ]]; then
-  # Export environment variables.
-  source "$_ssh_agent_env" 2> /dev/null
-
+# if [[ ! -S "$SSH_AUTH_SOCK" ]]; then
   # Start ssh-agent if not started.
   if ! ps -U "$LOGNAME" -o pid,ucomm | grep -q -- "${SSH_AGENT_PID:--1} ssh-agent"; then
-    mkdir -p "$_ssh_agent_env:h"
+    # mkdir -p "$_ssh_agent_env:h"
+    rm -f "$_ssh_agent_env"
     eval "$(ssh-agent | sed '/^echo /d' | tee "$_ssh_agent_env")"
   fi
-fi
+# fi
 
 # Create a persistent SSH authentication socket.
 if [[ -S "$SSH_AUTH_SOCK" && "$SSH_AUTH_SOCK" != "$_ssh_agent_sock" ]]; then
-  mkdir -p "$_ssh_agent_sock:h"
-  ln -sf "$SSH_AUTH_SOCK" "$_ssh_agent_sock"
+
+  # mkdir -p "$_ssh_agent_sock:h"
+  # ln -sf "$SSH_AUTH_SOCK" "$_ssh_agent_sock"
+
+  # Check whether it is a symlink created already
+  if ! [ "$SSH_AUTH_SOCK" -ef "$_ssh_agent_sock" ]; then
+      rm -f "$_ssh_agent_sock"
+      echo $SSH_AUTH_SOCK" != "$_ssh_agent_sock
+      ln -sf "$SSH_AUTH_SOCK" "$_ssh_agent_sock"
+  fi
+
   export SSH_AUTH_SOCK="$_ssh_agent_sock"
 fi
 
@@ -59,4 +72,4 @@ if ssh-add -l 2>&1 | grep -q 'The agent has no identities'; then
 fi
 
 # Clean up.
-unset _ssh_{dir,identities} _ssh_agent_{env,sock}
+unset _ssh_{dir,identities,host} _ssh_agent_{env,sock}

@@ -27,6 +27,10 @@ zstyle -s ':prezto:module:git:status:ignore' submodules '_git_status_ignore_subm
 #
 
 if ! zstyle -t ':prezto:module:git:alias' skip 'yes'; then
+
+  # cd GIT dir
+  alias cdg='cd-gitroot'
+
   # Git
   alias g='git'
 
@@ -231,7 +235,7 @@ if ! zstyle -t ':prezto:module:git:alias' skip 'yes'; then
   alias gRb='git-hub-browse'
 
   # Stash (s)
-  alias gs='git stash'
+  alias gs='git status --ignore-submodules=${_git_status_ignore_submodules}'
   alias gsa='git stash apply'
   alias gsx='git stash drop'
   alias gsX='git-stash-clear-interactive'

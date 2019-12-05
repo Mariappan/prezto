@@ -332,6 +332,10 @@ fi
 # Toggle comment at the start of the line.
 bindkey -M vicmd "#" vi-pound-insert
 
+# Set Ctrl-p and Ctrl-N to previous and next commands
+bindkey -M vicmd '^P' up-line-or-search
+bindkey -M vicmd '^N' down-line-or-search
+
 #
 # Emacs and Vi Key Bindings
 #
@@ -439,6 +443,13 @@ if zstyle -t ':prezto:module:editor' dot-expansion; then
   bindkey -M isearch . self-insert 2> /dev/null
 fi
 
+bindkey -M viins 'jk' vi-cmd-mode
+
+# Set Ctrl-p and Ctrl-N to previous and next commands
+bindkey "^P" up-line-or-search
+bindkey "^N" down-line-or-search
+
+
 #
 # Layout
 #
@@ -453,4 +464,7 @@ else
   print "prezto: editor: invalid key bindings: $key_bindings" >&2
 fi
 
-unset key{,map,_bindings}
+bindkey "^P" up-line-or-search
+bindkey "^N" down-line-or-search
+
+unset key{,map,bindings}

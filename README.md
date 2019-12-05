@@ -20,25 +20,19 @@ version is 4.3.11.
   2. Clone the repository:
 
      ```console
-     git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+     git clone --recursive https://github.com/mariappan/prezto.git "${ZDOTDIR:-$HOME}/prezto"
+     git clone --recursive git@github.com:Mariappan/prezto.git "${ZDOTDIR:-$HOME}/prezto"
+
+     cd "${ZDOTDIR:-$HOME}/prezto"
+     git remote add upstream https://github.com/sorin-ionescu/prezto.git
      ```
 
-  3. Create a new Zsh configuration by copying the Zsh configuration files
-     provided:
+  3. Create a new Zsh configuration by running the following script:
 
-     ```sh
-     setopt EXTENDED_GLOB
-     for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
-       ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
-     done
+     ```console
+     ./install.zsh           # Dry Run
+     ./install.zsh -f        # Actual Run
      ```
-
-     Note: If you already have any of the given configuration files, `ln` will
-     cause error. In simple cases you can load prezto by adding the line
-     `source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"` to the bottom of your
-     `.zshrc` and keep the rest of your Zsh configuration intact. For more
-     complicated setups, it is recommended that you back up your original
-     configs and replace them with the provided prezto runcoms.
 
   4. Set Zsh as your default shell:
 
@@ -47,6 +41,27 @@ version is 4.3.11.
      ```
 
   5. Open a new Zsh terminal window or tab.
+
+### Tips:
+
+* Syncing from the upstream:
+
+    ```console
+    git fetch upstream
+    git checkout master
+    git rebase upstream/master
+    git checkout mario
+    ```
+
+* To clean all submodules:
+
+    ```console
+    git clean -xfd
+    git submodule foreach --recursive git clean -xfd
+    git reset --hard
+    git submodule foreach --recursive git reset --hard
+    git submodule update --init --recursive
+    ```
 
 ### Troubleshooting
 

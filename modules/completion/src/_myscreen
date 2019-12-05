@@ -1,0 +1,32 @@
+#compdef myscreen
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for myscreen
+#
+#  Author: Mariappan R
+#
+# ------------------------------------------------------------------------------
+
+_myscreen() {
+  local -a projects
+  projects=(`tmux ls 2>/dev/null | cut -d':' -f1 | xargs`)
+
+  local -a commands
+  commands=(
+    'new:Create a new tmux for the project'
+    'ls:List all projects'
+  )
+
+  if (( CURRENT == 2 )); then
+    _describe -t projects 'projects' projects
+    _describe -t commands 'commands' commands
+  fi
+
+  return 0
+}
+
+_myscreen
+
+# vim: ft=zsh sw=2 ts=2 et
