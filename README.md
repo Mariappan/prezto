@@ -11,16 +11,22 @@ Installation
 Prezto will work with any recent release of Zsh, but the minimum required
 version is 4.3.11.
 
-  1. Launch Zsh:
+  1. Launch Zsh and set ZDOTDIR:
 
      ```console
      zsh
+     
+     mkdir -p ~/.config/zsh
+     export ZDOTDIR=~/.config/zsh
+     
      ```
 
   2. Clone the repository:
 
      ```console
+     
      git clone --recursive https://github.com/mariappan/prezto.git "${ZDOTDIR:-$HOME}/prezto"
+     
      git clone --recursive git@github.com:Mariappan/prezto.git "${ZDOTDIR:-$HOME}/prezto"
 
      cd "${ZDOTDIR:-$HOME}/prezto"
